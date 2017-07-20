@@ -1,4 +1,4 @@
-# [Roon](https://roonlabs.com) [Extension](node-roon-api) to provide [source switching, standby](https://github.com/RoonLabs/node-roon-api-source-control), and [volume control](https://github.com/RoonLabs/node-roon-api-volume-control) for [Meridian Audio](http://meridian-audio.com/)'s range of devices. via [RS232](https://github.com/RoonLabs/node-meridian-rs232)
+# [Roon](https://roonlabs.com) [Extension](node-roon-api) to provide [source switching, standby](https://github.com/RoonLabs/node-roon-api-source-control), and [volume control](https://github.com/RoonLabs/node-roon-api-volume-control) for [Meridian Audio](http://meridian-audio.com/)'s range of devices via [RS232](https://github.com/RoonLabs/node-meridian-rs232)
 
 This extension connects to your Meridian device (wether it be speakers, a surround processor, or something else) via RS232, and allows Roon to control it's volume directly, as well as standby, and convience source switching.
 
@@ -65,7 +65,7 @@ What my experience is like:
        the volume, and all is good. In Roon there is also a button to standby the
        speakers.
 
-       This is the same experience 
+       Minus multiple sources support, this is the same experience without the AC200, G61R, 818, etc..
 
 ----------------
 
