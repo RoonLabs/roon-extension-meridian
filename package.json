@@ -1,0 +1,16 @@
+{
+  "name": "roon-extension-devialet-expert",
+  "version": "1.0.0",
+  "description": "Roon Extension to let Roon control the Meridian devices via RS232",
+  "main": "app.js",
+  "author": "Roon Labs, LLC",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "node-meridian-rs232": "github:roonlabs/node-meridian-rs232",
+    "node-roon-api": "github:roonlabs/node-roon-api",
+    "node-roon-api-settings": "github:roonlabs/node-roon-api-settings",
+    "node-roon-api-status": "github:roonlabs/node-roon-api-status",
+    "node-roon-api-volume-control": "github:roonlabs/node-roon-api-volume-control",
+    "node-roon-api-source-control": "github:roonlabs/node-roon-api-source-control"
+  }
+}
