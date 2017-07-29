@@ -6,7 +6,7 @@
   "author": "Roon Labs, LLC",
   "license": "Apache-2.0",
   "dependencies": {
-    "node-meridian-rs232": "github:roonlabs/node-meridian-rs232",
+    "node-meridian": "github:roonlabs/node-meridian",
     "node-roon-api": "github:roonlabs/node-roon-api",
     "node-roon-api-settings": "github:roonlabs/node-roon-api-settings",
     "node-roon-api-status": "github:roonlabs/node-roon-api-status",
