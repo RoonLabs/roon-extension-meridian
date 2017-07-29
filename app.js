@@ -28,7 +28,7 @@ var mysettings = roon.load_config("settings") || {
 var meridian = { };
 
 function makelayout(settings) {
-    var l = { 
+    var l = {
         values:    settings,
 	layout:    [],
 	has_error: false
@@ -105,10 +105,19 @@ var svc_settings = new RoonApiSettings(roon, {
         req.send_complete(l.has_error ? "NotValid" : "Success", { settings: l });
 
         if (!isdryrun && !l.has_error) {
+            var oldmode = mysettings.mode;
+            var oldip = mysettings.ip;
             var oldport = mysettings.serialport;
             mysettings = l.values;
             svc_settings.update_settings(l);
-            if (oldport != mysettings.serialport) setup_serial_port(mysettings.serialport);
+            let force = false;
+            if (oldmode != mysettings.mode) force = true;
+            if (mysettings.mode == "218") {
+                if (oldip != mysettings.ip) force = true;
+            } else {
+                if (oldport != mysettings.serialport) force = true;
+            }
+            if (force) setup();
             roon.save_config("settings", mysettings);
         }
     }
@@ -122,7 +131,7 @@ roon.init_services({
     provided_services: [ svc_volume_control, svc_source_control, svc_settings, svc_status ]
 });
 
-function setup_serial_port(port) {
+function setup() {
     if (meridian.control)
         meridian.control.stop();
 
@@ -136,27 +145,37 @@ function setup_serial_port(port) {
     if (meridian.source_control) { meridian.source_control.destroy(); delete(meridian.source_control); }
     if (meridian.volume_control) { meridian.volume_control.destroy(); delete(meridian.volume_control); }
 
-    if (port)
-        meridian.control.start({ port: port, volume: mysettings.initialvolume, source: mysettings.setsource });
-    else
-        svc_status.set_status("Not configured, please check settings.", true);
+    var opts = { volume: mysettings.initialvolume, source: mysettings.setsource };
+    if (mysettings.mode == "218") {
+        if (!mysettings.ip) {
+            svc_status.set_status("Not configured, please check settings.", true);
+            return;
+        }
+        opts.ip = mysettings.ip;
+    } else {
+        if (!mysettings.serialport) {
+            svc_status.set_status("Not configured, please check settings.", true);
+            return;
+        }
+        opts.port = mysettings.serialport;
+    }
+    console.log(opts);
+    meridian.control.start(opts);
 }
 
-setup_serial_port(mysettings.serialport);
-    
 function ev_connected(status) {
     let control = meridian.control;
 
     console.log("[Meridian Extension] Connected");
 
-    svc_status.set_status("Connected to Meridian RS232", false);
+    svc_status.set_status("Connected to Meridian", false);
 
     control.set_volume(mysettings.initialvolume);
     control.set_source(mysettings.setsource);
 
     meridian.volume_control = svc_volume_control.new_device({
 	state: {
-	    display_name: "Meridian", // XXX need better less generic name -- can we get serial number from the RS232?
+	    display_name: "Meridian", // XXX need better less generic name -- can we get serial number from the controller?
 	    volume_type:  "number",
 	    volume_min:   1,
 	    volume_max:   99,
@@ -186,7 +205,7 @@ function ev_connected(status) {
 
     meridian.source_control = svc_source_control.new_device({
 	state: {
-	    display_name:     "Meridian", // XXX need better less generic name -- can we get serial number from the RS232?
+	    display_name:     "Meridian", // XXX need better less generic name -- can we get serial number from the controller?
 	    supports_standby: true,
 	    status:           control.properties.source == "Standby" ? "standby" : (control.properties.source == mysettings.displaysource ? "selected" : "deselected")
 	},
@@ -208,7 +227,11 @@ function ev_disconnected(status) {
 
     console.log("[Meridian Extension] Disconnected");
 
-    svc_status.set_status("Could not connect to Meridian RS232 on \"" + mysettings.serialport + "\"", true);
+    if (mysettings.mode == "218")
+        svc_status.set_status("Could not connect to Meridian on \"" + mysettings.ip + "\"", true);
+    else
+        svc_status.set_status("Could not connect to Meridian on \"" + mysettings.serialport + "\"", true);
+
     if (meridian.source_control) { meridian.source_control.destroy(); delete(meridian.source_control); }
     if (meridian.volume_control) { meridian.volume_control.destroy(); delete(meridian.volume_control);   }
 }
@@ -232,5 +255,7 @@ function ev_source(val) {
 	meridian.source_control.update_state({ status: (val == mysettings.displaysource ? "selected" : "deselected") });
     }
 }
+
+setup();
 
 roon.start_discovery();
