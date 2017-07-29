@@ -79,8 +79,8 @@ function makelayout(settings) {
             { value: "CR", title: "CDR/Disc"        },
             { value: "CB", title: "Cable"           },
             { value: "TX", title: "Text/DVD"        },
-            { value: "V1", title: "VCR1/Mixer/PVR"  }
-            { value: "V2", title: "VCR2/USB"        }
+            { value: "V1", title: "VCR1/Mixer/PVR"  },
+            { value: "V2", title: "VCR2/USB"        },
             { value: "LD", title: "LDisc/Game"      }
         ],
         setting: "setsource",
