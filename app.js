@@ -25,7 +25,7 @@ var mysettings = roon.load_config("settings") || {
     mode:          "TN51",
 };
 
-var meridian = { control: new Meridian(mysettings.mode) };
+var meridian = { };
 
 function makelayout(settings) {
     var l = { 
@@ -123,12 +123,21 @@ roon.init_services({
 });
 
 function setup_serial_port(port) {
-    meridian.control.stop();
+    if (meridian.control)
+        meridian.control.stop();
+
+    meridian.control = new Meridian(mysettings.mode);
+
+    meridian.control.on('connected', ev_connected);
+    meridian.control.on('disconnected', ev_disconnected);
+    meridian.control.on('volume', ev_volume);
+    meridian.control.on('source', ev_source);
+
     if (meridian.source_control) { meridian.source_control.destroy(); delete(meridian.source_control); }
     if (meridian.volume_control) { meridian.volume_control.destroy(); delete(meridian.volume_control); }
 
     if (port)
-        meridian.control.start({ port: port, volume: mysettings.volume, source: mysettings.setsource });
+        meridian.control.start({ port: port, volume: mysettings.initialvolume, source: mysettings.setsource });
     else
         svc_status.set_status("Not configured, please check settings.", true);
 }
@@ -223,10 +232,5 @@ function ev_source(val) {
 	meridian.source_control.update_state({ status: (val == mysettings.displaysource ? "selected" : "deselected") });
     }
 }
-
-meridian.control.on('connected', ev_connected);
-meridian.control.on('disconnected', ev_disconnected);
-meridian.control.on('volume', ev_volume);
-meridian.control.on('source', ev_source);
 
 roon.start_discovery();
