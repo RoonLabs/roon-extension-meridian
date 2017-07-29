@@ -1,5 +1,5 @@
 {
-  "name": "roon-extension-devialet-expert",
+  "name": "roon-extension-meridian",
   "version": "1.0.0",
   "description": "Roon Extension to let Roon control the Meridian devices via RS232",
   "main": "app.js",
