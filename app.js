@@ -162,7 +162,7 @@ function ev_connected(status) {
 	    volume_max:   99,
 	    volume_value: control.properties.volume > 0 ? control.properties.volume : 65,
 	    volume_step:  1.0,
-	    is_muted:     control.properties.source == "MU"
+	    is_muted:     control.properties.source == "Muted"
 	},
 	set_volume: function (req, mode, value) {
 	    let newvol = mode == "absolute" ? value : (control.properties.volume + value);
@@ -176,7 +176,7 @@ function ev_connected(status) {
 		control.mute();
 	    else if (action == "off")
 		control.set_source(mysettings.setsource);
-	    else if (control.properties.source == "MU")
+	    else if (control.properties.source == "Muted")
 		control.set_source(mysettings.setsource);
 	    else
 		control.mute();
@@ -188,7 +188,7 @@ function ev_connected(status) {
 	state: {
 	    display_name:     "Meridian", // XXX need better less generic name -- can we get serial number from the RS232?
 	    supports_standby: true,
-	    status:           control.properties.source == "SB" ? "standby" : (control.properties.source == mysettings.displaysource ? "selected" : "deselected")
+	    status:           control.properties.source == "Standby" ? "standby" : (control.properties.source == mysettings.displaysource ? "selected" : "deselected")
 	},
 	convenience_switch: function (req) {
 	    control.set_source(mysettings.setsource, err => { req.send_complete(err ? "Failed" : "Success"); });
@@ -222,9 +222,9 @@ function ev_volume(val) {
 function ev_source(val) {
     let control = meridian.control;
     console.log("[Meridian Extension] received source change from device:", val);
-    if (val == "MU" && meridian.volume_control)
+    if (val == "Muted" && meridian.volume_control)
         meridian.volume_control.update_state({ is_muted: true });
-    else if (val == "SB" && meridian.source_control)
+    else if (val == "Standby" && meridian.source_control)
         meridian.source_control.update_state({ status: "standby" });
     else {
 	if (meridian.volume_control)

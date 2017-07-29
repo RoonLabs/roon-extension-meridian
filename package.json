@@ -9,8 +9,8 @@
     "node-meridian": "github:roonlabs/node-meridian",
     "node-roon-api": "github:roonlabs/node-roon-api",
     "node-roon-api-settings": "github:roonlabs/node-roon-api-settings",
+    "node-roon-api-source-control": "github:roonlabs/node-roon-api-source-control",
     "node-roon-api-status": "github:roonlabs/node-roon-api-status",
-    "node-roon-api-volume-control": "github:roonlabs/node-roon-api-volume-control",
-    "node-roon-api-source-control": "github:roonlabs/node-roon-api-source-control"
+    "node-roon-api-volume-control": "github:roonlabs/node-roon-api-volume-control"
   }
 }
