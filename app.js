@@ -128,7 +128,7 @@ function setup_serial_port(port) {
     if (meridian.volume_control) { meridian.volume_control.destroy(); delete(meridian.volume_control); }
 
     if (port)
-        meridian.control.start({ port: port, volume: mysettings.volume, setsource: mysettings.setsource, displaysource: mysettings.displaysource });
+        meridian.control.start({ port: port, volume: mysettings.volume, source: mysettings.setsource });
     else
         svc_status.set_status("Not configured, please check settings.", true);
 }
