@@ -40,6 +40,7 @@ function makelayout(settings) {
         values:  [
             { value: "TN49", title: "TN49" },
             { value: "TN51", title: "TN51" },
+            { value: "DS 6ii03", title: "DS 6ii03" },
         ],
         setting: "mode",
     });
