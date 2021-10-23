@@ -24,7 +24,7 @@ This document claims that the protocol works for the following products/versions
 	DSP3200: 1.2.0 or higher
 	DSP3300: 1.2.0 or higher
 
-I can also personally confirm this also works for DSP7200 1.0.0.
+I can also personally confirm this also works for DSP7200 1.0.0 and the DSP7200SE upgrade-kit.
 
 ---------------------
 
@@ -61,7 +61,7 @@ What my experience is like:
 
        Nucleus + DSP7200 w/ full volume control, muting, standby, waking/convienience switching.
 
-       I just go into roon and play music, and it turns on the speakers, sets
+       I just go into Roon and play music, and it turns on the speakers, sets
        the volume, and all is good. In Roon there is also a button to standby the
        speakers.
 
