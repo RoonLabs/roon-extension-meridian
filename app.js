@@ -62,7 +62,7 @@ function makelayout(settings) {
 
     l.layout.push({
         type:    "string",
-        title:   "Source displayed on device (select source and see what speakers display)",
+        title:   "Source displayed on device (select source and see what speakers display, may need multiple entries with some speakers)",
         maxlength: 5,
         setting: "displaysource",
     });
@@ -164,6 +164,11 @@ function setup() {
     meridian.control.start(opts);
 }
 
+function is_selected(v) {
+    return mysettings.displaysource.split(/[\/ ,]/).map(x => x.toLowerCase()).indexOf(v.toLowerCase()) != -1;
+}
+
+
 function ev_connected(status) {
     let control = meridian.control;
 
@@ -208,7 +213,7 @@ function ev_connected(status) {
 	state: {
 	    display_name:     "Meridian", // XXX need better less generic name -- can we get serial number from the controller?
 	    supports_standby: true,
-	    status:           control.properties.source == "Standby" ? "standby" : (control.properties.source == mysettings.displaysource ? "selected" : "deselected")
+	    status:           control.properties.source == "Standby" ? "standby" : (is_selected(control.properties.source) ? "selected" : "deselected")
 	},
 	convenience_switch: function (req) {
 	    control.set_source(mysettings.setsource, err => { req.send_complete(err ? "Failed" : "Success"); });
@@ -224,8 +229,6 @@ function ev_connected(status) {
 }
 
 function ev_disconnected(status) {
-    let control = meridian.control;
-
     console.log("[Meridian Extension] Disconnected");
 
     if (mysettings.mode == "218")
@@ -238,13 +241,11 @@ function ev_disconnected(status) {
 }
 
 function ev_volume(val) {
-    let control = meridian.control;
     console.log("[Meridian Extension] received volume change from device:", val);
     if (meridian.volume_control)
         meridian.volume_control.update_state({ volume_value: val });
 }
 function ev_source(val) {
-    let control = meridian.control;
     console.log("[Meridian Extension] received source change from device:", val);
     if (val == "Muted" && meridian.volume_control)
         meridian.volume_control.update_state({ is_muted: true });
@@ -253,7 +254,7 @@ function ev_source(val) {
     else {
 	if (meridian.volume_control)
 	    meridian.volume_control.update_state({ is_muted: false });
-	meridian.source_control.update_state({ status: (val == mysettings.displaysource ? "selected" : "deselected") });
+	meridian.source_control.update_state({ status: (is_selected(val) ? "selected" : "deselected") });
     }
 }
 
